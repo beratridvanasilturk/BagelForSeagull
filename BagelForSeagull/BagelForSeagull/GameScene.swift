@@ -1,17 +1,14 @@
 //
 //  GameScene.swift
-//  AngryBirdClone
+//  BagelForSeagul
 //
-//  Created by Atil Samancioglu on 12.08.2019.
-//  Copyright © 2019 Atil Samancioglu. All rights reserved.
-//
+//  Created by  Berat Ridvan Asilturk on 12.10.2022.
+
 
 import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    
-    //var bird2 = SKSpriteNode()
     
     var bagel = SKSpriteNode()
     var bird1 = SKSpriteNode()
@@ -33,22 +30,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func didMove(to view: SKView) {
-        /*
-        let texture = SKTexture(imageNamed: "bird")
-        bird2 = SKSpriteNode(texture: texture)
-        bird2.position = CGPoint(x: -self.frame.width / 4, y: -self.frame.height / 4)
-        bird2.size = CGSize(width: self.frame.width / 16, height: self.frame.height / 10)
-        bird2.zPosition = 1
-        self.addChild(bird2)
- */
         
         //Physics Body
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         self.scene?.scaleMode = .aspectFit
         self.physicsWorld.contactDelegate = self
         
-        // Bird
-        
+ 
         bagel = childNode(withName: "bagel") as! SKSpriteNode
         
         let bagelTexture = SKTexture(imageNamed: "bagel")
@@ -64,11 +52,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
         bagel.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
-        
-        
-        
-        //Box
-        
         let bird1Texture = SKTexture(imageNamed: "bird1")
         
         bird1 = childNode(withName: "bird1") as! SKSpriteNode
@@ -76,15 +59,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird1.physicsBody?.isDynamic = true
         bird1.physicsBody?.affectedByGravity = true
         bird1.physicsBody?.allowsRotation = true
-        bird1.physicsBody?.mass = 0.4
-    
+        bird1.physicsBody?.mass = 0.5
         
         bird1.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
         bird1.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
         
         // Bird1'in bagel'dan etkilenmesini, onunla compact olunca harekete gecmesini saglar
         bird1.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
-        
         
         let bird2Texture = SKTexture(imageNamed: "bird2")
         
@@ -99,7 +80,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird2.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
         
         bird2.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
-
         
         let bird3Texture = SKTexture(imageNamed: "bird3")
         
@@ -114,7 +94,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird3.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
         
         bird3.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
-
         
         let seagullTexture = SKTexture(imageNamed: "seagull")
         
@@ -129,19 +108,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         seagull.physicsBody?.categoryBitMask = ColliderType.Seagull.rawValue
         
         seagull.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
-
         
-//        box5 = childNode(withName: "box5") as! SKSpriteNode
-//        box5.physicsBody = SKPhysicsBody(rectangleOf: size)
-//        box5.physicsBody?.isDynamic = true
-//        box5.physicsBody?.affectedByGravity = true
-//        box5.physicsBody?.allowsRotation = true
-//        box5.physicsBody?.mass = 0.4
-//        box5.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
-
-     
         //Label
-        
         scoreLabel.fontName = "Helvetica"
         scoreLabel.fontSize = 40
         scoreLabel.fontColor = .black
@@ -150,25 +118,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = 2
         self.addChild(scoreLabel)
         
-        
-       
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         
         if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue {
-                
-                score += 3
-                scoreLabel.text = String(score)
-                print("YES ")
-            } else {
+            
+            score += 3
+            scoreLabel.text = "Score:" + String(score)
+            print("YES ")
+        } else {
             score -= 1
-            scoreLabel.text = String(score)
+            scoreLabel.text = "Score:" + String(score)
             print("NO ")
         }
-        
     }
-    
     
     func touchDown(atPoint pos : CGPoint) {
        
@@ -183,10 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        /*
-        bird.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 100))
-        bird.physicsBody?.affectedByGravity = true
- */
+    
         if gameStarted == false {
             
             if let touch = touches.first {
@@ -210,10 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
             }
             
-            
-            
         }
-        
    
     }
     
@@ -240,9 +198,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
               }
               
           }
-          
-          
-          
+
       }
         
     }
@@ -290,15 +246,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
        
     }
     
-    
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        
         
         if let birdPhysicsBody = bagel.physicsBody {
             
             if birdPhysicsBody.velocity.dx <= 0.1 && birdPhysicsBody.velocity.dy <= 0.1 && birdPhysicsBody.angularVelocity <= 0.1 && gameStarted == true {
-                
                 
                 bagel.physicsBody?.affectedByGravity = false
                 bagel.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
@@ -306,12 +258,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bagel.zPosition = 1
                 bagel.position = originalPosition!
                 
-                
-                //score = 0
-                //scoreLabel.text = String(score)
-                
                 gameStarted = false
-                
                 
             }
             
