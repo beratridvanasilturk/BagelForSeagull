@@ -20,6 +20,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // TouchesEnded'da cektikten sonra firlatmak icin kullandik
     var originalPosition: CGPoint?
     
+    var scoreLabel = SKLabelNode()
+    
+    enum ColliderType: UInt32 {
+        case Bagel = 1
+        case Bird = 2
+        
+    }
+    
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
@@ -29,6 +37,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Physics Body
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         self.scene?.scaleMode = .aspectFill
+        // Contactlari algilamak icin kullanilir
+        self.physicsWorld.contactDelegate = self
         
         // Bagel
         bagel = childNode(withName: "bagel") as! SKSpriteNode
@@ -40,9 +50,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bagel.physicsBody?.mass = 0.3
         originalPosition = bagel.position
         
+        // Cisimlerin birbiri ile etkilesimini duzenler
+        bagel.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
+        bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
+        bagel.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        
+        
+        
         // Other Birds
         
         let bird1Texture = SKTexture(imageNamed: "false bird 1")
+        
+        bird1.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
         bird1 = childNode(withName: "false bird 1") as! SKSpriteNode
         bird1.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
@@ -55,6 +74,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bird2Texture = SKTexture(imageNamed: "false bird 2")
         
+        bird2.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        
         bird2 = childNode(withName: "false bird 2") as! SKSpriteNode
         bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird2Texture.size().height / 11)
         bird2.physicsBody?.affectedByGravity = false
@@ -66,6 +87,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bird3Texture = SKTexture(imageNamed: "false bird 3")
         
+        bird3.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        
         bird3 = childNode(withName: "false bird 3") as! SKSpriteNode
         bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird3Texture.size().height / 11)
         bird3.physicsBody?.affectedByGravity = false
@@ -73,11 +96,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird3.physicsBody?.mass = 0.5
         bird3.physicsBody?.allowsRotation = true
         
+        // Label
+        
+        scoreLabel.fontName = "Helvatica"
+        scoreLabel.fontSize = 60
+        scoreLabel.fontColor = .darkGray
+        scoreLabel.text = "0"
+        scoreLabel.position = CGPoint(x: 0, y: self.frame.height / 4)
+        scoreLabel.zPosition = 2
+        self.addChild(scoreLabel)
         
         
         
     }
-        
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        // Iki farkli cismin birbiri ile etkilesimini duzenler
+        if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue || contact.bodyB.collisionBitMask == ColliderType.Bagel.rawValue {
+            
+            print("Contact")
+        }
+    }
+    
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
