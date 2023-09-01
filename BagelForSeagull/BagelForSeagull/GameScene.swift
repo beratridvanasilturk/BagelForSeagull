@@ -61,6 +61,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Seagull
         
+        let seagullTexture = SKTexture(imageNamed: "Seagull")
+        
+        seagull.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        
+        seagull = childNode(withName: "Seagull") as! SKSpriteNode
+        seagull.physicsBody = SKPhysicsBody(circleOfRadius: seagullTexture.size().height / 11)
+        seagull.physicsBody?.affectedByGravity = false
+        seagull.physicsBody?.isDynamic = true
+        seagull.physicsBody?.mass = 0.3
+        seagull.physicsBody?.allowsRotation = true
+        
+        
         // Other Birds
         
         let bird1Texture = SKTexture(imageNamed: "false bird 1")
@@ -71,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird1.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
         bird1.physicsBody?.affectedByGravity = false
         bird1.physicsBody?.isDynamic = true
-        bird1.physicsBody?.mass = 0.5
+        bird1.physicsBody?.mass = 0.7
         bird1.physicsBody?.allowsRotation = true
         
         
@@ -84,7 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird2Texture.size().height / 11)
         bird2.physicsBody?.affectedByGravity = false
         bird2.physicsBody?.isDynamic = true
-        bird2.physicsBody?.mass = 0.5
+        bird2.physicsBody?.mass = 0.9
         bird2.physicsBody?.allowsRotation = true
         
         
@@ -97,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird3Texture.size().height / 11)
         bird3.physicsBody?.affectedByGravity = false
         bird3.physicsBody?.isDynamic = true
-        bird3.physicsBody?.mass = 0.5
+        bird3.physicsBody?.mass = 0.2
         bird3.physicsBody?.allowsRotation = true
         
         // Label
