@@ -50,20 +50,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bagel.physicsBody = SKPhysicsBody(circleOfRadius: bagelTexture.size().height / 11 )
         bagel.physicsBody?.affectedByGravity = false
         bagel.physicsBody?.isDynamic = true
-        bagel.physicsBody?.mass = 0.3
+        bagel.physicsBody?.mass = 0.1
         originalPosition = bagel.position
         
         // Cisimlerin birbiri ile etkilesimini duzenler
-        bagel.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
-        bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
-        // Sadece kus ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
+        bagel.physicsBody?.contactTestBitMask = ColliderType.Seagull.rawValue
+        bagel.physicsBody?.categoryBitMask = ColliderType.Seagull.rawValue
+        
+        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
+        bagel.physicsBody?.collisionBitMask = ColliderType.Seagull.rawValue
+        
+        
+        bagel.physicsBody?.contactTestBitMask = ColliderType.Bird.rawValue
+        bagel.physicsBody?.categoryBitMask = ColliderType.Bird.rawValue
+        
+        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
         bagel.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
         // Seagull
         
         let seagullTexture = SKTexture(imageNamed: "Seagull")
-        
-        seagull.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
         seagull = childNode(withName: "Seagull") as! SKSpriteNode
         seagull.physicsBody = SKPhysicsBody(circleOfRadius: seagullTexture.size().height / 11)
@@ -72,38 +78,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         seagull.physicsBody?.mass = 0.3
         seagull.physicsBody?.allowsRotation = true
         
+        seagull.physicsBody?.contactTestBitMask = ColliderType.Seagull.rawValue
+        seagull.physicsBody?.categoryBitMask = ColliderType.Seagull.rawValue
+        
+     
+        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
+        seagull.physicsBody?.collisionBitMask = ColliderType.Seagull.rawValue
         
         // Other Birds
         
+        
         let bird1Texture = SKTexture(imageNamed: "false bird 1")
         
-        bird1.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+       
         
         bird1 = childNode(withName: "false bird 1") as! SKSpriteNode
         bird1.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
         bird1.physicsBody?.affectedByGravity = false
         bird1.physicsBody?.isDynamic = true
-        bird1.physicsBody?.mass = 0.7
+        bird1.physicsBody?.mass = 0.2
         bird1.physicsBody?.allowsRotation = true
         
-        
+        bird1.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
         let bird2Texture = SKTexture(imageNamed: "false bird 2")
         
-        bird2.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+       
         
         bird2 = childNode(withName: "false bird 2") as! SKSpriteNode
         bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird2Texture.size().height / 11)
         bird2.physicsBody?.affectedByGravity = false
         bird2.physicsBody?.isDynamic = true
-        bird2.physicsBody?.mass = 0.9
+        bird2.physicsBody?.mass = 0.2
         bird2.physicsBody?.allowsRotation = true
         
-        
+        bird2.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
         let bird3Texture = SKTexture(imageNamed: "false bird 3")
         
-        bird3.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+    
         
         bird3 = childNode(withName: "false bird 3") as! SKSpriteNode
         bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird3Texture.size().height / 11)
@@ -111,6 +124,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird3.physicsBody?.isDynamic = true
         bird3.physicsBody?.mass = 0.2
         bird3.physicsBody?.allowsRotation = true
+        
+        bird3.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
         // Label
         
@@ -125,15 +140,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
     }
-    
+    // Delegate eklendikten sonra didbegincontact yani birbirine degdi func cagrilabilir
     func didBegin(_ contact: SKPhysicsContact) {
         // Iki farkli cismin birbiri ile etkilesimini duzenler
-        if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue || contact.bodyB.collisionBitMask == ColliderType.Bagel.rawValue {
-            
-            score += 1
+        if contact.bodyA.collisionBitMask == ColliderType.Seagull.rawValue || contact.bodyB.collisionBitMask == ColliderType.Seagull.rawValue {
+                    
+                    score += 1
+                    scoreLabel.text = String(score)
+                    
+        } else {
+            score -= 1
             scoreLabel.text = String(score)
-            
-            print("Contact")
         }
     }
     
@@ -243,8 +260,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bagel.position = originalPosition!
                 gameStarted = false
                 
-                score = 0
-                scoreLabel.text = String(score)
+//                score = 0
+//                scoreLabel.text = String(score)
                 
                 gameStarted = false
                 
