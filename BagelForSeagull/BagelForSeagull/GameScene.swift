@@ -53,10 +53,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bagelTexture = SKTexture(imageNamed: "bagel")
         
+        
         bagel.physicsBody = SKPhysicsBody(circleOfRadius: bagelTexture.size().height / 13)
         bagel.physicsBody?.affectedByGravity = false
         bagel.physicsBody?.isDynamic = true
-        bagel.physicsBody?.mass = 0.15
+        bagel.physicsBody?.mass = 0.4
         originalPosition = bagel.position
         
         bagel.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
@@ -142,8 +143,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Label
         
         scoreLabel.fontName = "Helvetica"
-        scoreLabel.fontSize = 60
-        scoreLabel.text = "0"
+        scoreLabel.fontSize = 40
+        scoreLabel.fontColor = .black
+        scoreLabel.text = "Score: 0"
         scoreLabel.position = CGPoint(x: 0, y: self.frame.height / 4)
         scoreLabel.zPosition = 2
         self.addChild(scoreLabel)
@@ -156,7 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue {
                 
-                score += 1
+                score += 3
                 scoreLabel.text = String(score)
                 print("YES ")
             } else {
