@@ -24,7 +24,8 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         // Physics Body
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame )
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        self.scene?.scaleMode = .aspectFill
         
         // Bagel
         bagel = childNode(withName: "bagel") as! SKSpriteNode
@@ -52,7 +53,7 @@ class GameScene: SKScene {
         let bird2Texture = SKTexture(imageNamed: "false bird 2")
             
         bird2 = childNode(withName: "false bird 2") as! SKSpriteNode
-        bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
+        bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird2Texture.size().height / 11)
         bird2.physicsBody?.affectedByGravity = false
         bird2.physicsBody?.isDynamic = true
         bird2.physicsBody?.mass = 0.5
@@ -63,7 +64,7 @@ class GameScene: SKScene {
         let bird3Texture = SKTexture(imageNamed: "false bird 3")
             
         bird3 = childNode(withName: "false bird 3") as! SKSpriteNode
-        bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
+        bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird3Texture.size().height / 11)
         bird3.physicsBody?.affectedByGravity = false
         bird3.physicsBody?.isDynamic = true
         bird3.physicsBody?.mass = 0.5
