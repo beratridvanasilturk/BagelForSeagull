@@ -20,6 +20,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // TouchesEnded'da cektikten sonra firlatmak icin kullandik
     var originalPosition: CGPoint?
     
+    var score = 0
     var scoreLabel = SKLabelNode()
     
     enum ColliderType: UInt32 {
@@ -113,6 +114,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         // Iki farkli cismin birbiri ile etkilesimini duzenler
         if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue || contact.bodyB.collisionBitMask == ColliderType.Bagel.rawValue {
+            
+            score += 1
+            scoreLabel.text = String(score)
             
             print("Contact")
         }
