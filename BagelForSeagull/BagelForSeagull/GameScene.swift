@@ -1,8 +1,9 @@
 //
 //  GameScene.swift
-//  BagelForSeagull
+//  AngryBirdClone
 //
-//  Created by Berat Rıdvan Asiltürk on 1.09.2023.
+//  Created by Atil Samancioglu on 12.08.2019.
+//  Copyright © 2019 Atil Samancioglu. All rights reserved.
 //
 
 import SpriteKit
@@ -10,154 +11,180 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    // MARK: -Variables
+    //var bird2 = SKSpriteNode()
+    
     var bagel = SKSpriteNode()
-    var seagull = SKSpriteNode()
     var bird1 = SKSpriteNode()
     var bird2 = SKSpriteNode()
     var bird3 = SKSpriteNode()
+    var seagull = SKSpriteNode()
     
     var gameStarted = false
-    // TouchesEnded'da cektikten sonra firlatmak icin kullandik
-    var originalPosition: CGPoint?
+    
+    var originalPosition : CGPoint?
     
     var score = 0
     var scoreLabel = SKLabelNode()
     
     enum ColliderType: UInt32 {
         case Bagel = 1
-        case Seagull = 2
-        case Bird = 4
-        
+        case Bird = 2
+        case Seagull = 4
     }
-    
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
-    
-    // MARK: -Funcs
+
     override func didMove(to view: SKView) {
+        /*
+        let texture = SKTexture(imageNamed: "bird")
+        bird2 = SKSpriteNode(texture: texture)
+        bird2.position = CGPoint(x: -self.frame.width / 4, y: -self.frame.height / 4)
+        bird2.size = CGSize(width: self.frame.width / 16, height: self.frame.height / 10)
+        bird2.zPosition = 1
+        self.addChild(bird2)
+ */
         
-        // Physics Body
+        //Physics Body
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
-        self.scene?.scaleMode = .aspectFill
-        // Contactlari algilamak icin kullanilir
+        self.scene?.scaleMode = .aspectFit
         self.physicsWorld.contactDelegate = self
         
-        // Bagel
+        // Bird
+        
         bagel = childNode(withName: "bagel") as! SKSpriteNode
+        
         let bagelTexture = SKTexture(imageNamed: "bagel")
         
-        bagel.physicsBody = SKPhysicsBody(circleOfRadius: bagelTexture.size().height / 11 )
+        bagel.physicsBody = SKPhysicsBody(circleOfRadius: bagelTexture.size().height / 13)
         bagel.physicsBody?.affectedByGravity = false
         bagel.physicsBody?.isDynamic = true
-        bagel.physicsBody?.mass = 0.1
+        bagel.physicsBody?.mass = 0.15
         originalPosition = bagel.position
         
-        // Cisimlerin birbiri ile etkilesimini duzenler
-        bagel.physicsBody?.contactTestBitMask = ColliderType.Seagull.rawValue
-        bagel.physicsBody?.categoryBitMask = ColliderType.Seagull.rawValue
-        
-        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
-        bagel.physicsBody?.collisionBitMask = ColliderType.Seagull.rawValue
+        bagel.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
+        bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
+        bagel.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
         
-        bagel.physicsBody?.contactTestBitMask = ColliderType.Bird.rawValue
-        bagel.physicsBody?.categoryBitMask = ColliderType.Bird.rawValue
         
-        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
-        bagel.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
-        // Seagull
+        //Box
         
-        let seagullTexture = SKTexture(imageNamed: "Seagull")
+        let bird1Texture = SKTexture(imageNamed: "bird1")
         
-        seagull = childNode(withName: "Seagull") as! SKSpriteNode
-        seagull.physicsBody = SKPhysicsBody(circleOfRadius: seagullTexture.size().height / 11)
-        seagull.physicsBody?.affectedByGravity = false
+        bird1 = childNode(withName: "bird1") as! SKSpriteNode
+        bird1.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: bird1Texture.size().width / 6, height: bird1Texture.size().height / 6))
+        bird1.physicsBody?.isDynamic = true
+        bird1.physicsBody?.affectedByGravity = true
+        bird1.physicsBody?.allowsRotation = true
+        bird1.physicsBody?.mass = 0.4
+    
+        
+        bird1.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
+        bird1.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
+        
+        // Bird1'in bagel'dan etkilenmesini, onunla compact olunca harekete gecmesini saglar
+        bird1.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        
+        
+        let bird2Texture = SKTexture(imageNamed: "bird2")
+        
+        bird2 = childNode(withName: "bird2") as! SKSpriteNode
+        bird2.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: bird2Texture.size().width / 6, height: bird2Texture.size().height / 6))
+        bird2.physicsBody?.isDynamic = true
+        bird2.physicsBody?.affectedByGravity = true
+        bird2.physicsBody?.allowsRotation = true
+        bird2.physicsBody?.mass = 0.4
+        
+        bird2.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
+        bird2.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
+        
+        bird2.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+
+        
+        let bird3Texture = SKTexture(imageNamed: "bird3")
+        
+        bird3 = childNode(withName: "bird3") as! SKSpriteNode
+        bird3.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: bird3Texture.size().width / 6, height: bird3Texture.size().height / 6))
+        bird3.physicsBody?.isDynamic = true
+        bird3.physicsBody?.affectedByGravity = true
+        bird3.physicsBody?.allowsRotation = true
+        bird3.physicsBody?.mass = 0.4
+        
+        bird3.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
+        bird3.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
+        
+        bird3.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+
+        
+        let seagullTexture = SKTexture(imageNamed: "seagull")
+        
+        seagull = childNode(withName: "seagull") as! SKSpriteNode
+        seagull.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: seagullTexture.size().width / 6, height: seagullTexture.size().height / 6))
         seagull.physicsBody?.isDynamic = true
-        seagull.physicsBody?.mass = 0.3
+        seagull.physicsBody?.affectedByGravity = true
         seagull.physicsBody?.allowsRotation = true
+        seagull.physicsBody?.mass = 0.4
         
         seagull.physicsBody?.contactTestBitMask = ColliderType.Seagull.rawValue
         seagull.physicsBody?.categoryBitMask = ColliderType.Seagull.rawValue
         
+        seagull.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+
+        
+//        box5 = childNode(withName: "box5") as! SKSpriteNode
+//        box5.physicsBody = SKPhysicsBody(rectangleOf: size)
+//        box5.physicsBody?.isDynamic = true
+//        box5.physicsBody?.affectedByGravity = true
+//        box5.physicsBody?.allowsRotation = true
+//        box5.physicsBody?.mass = 0.4
+//        box5.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
+
      
-        // Sadece seagul ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
-        seagull.physicsBody?.collisionBitMask = ColliderType.Seagull.rawValue
+        //Label
         
-        // Other Birds
-        
-        
-        let bird1Texture = SKTexture(imageNamed: "false bird 1")
-        
-       
-        
-        bird1 = childNode(withName: "false bird 1") as! SKSpriteNode
-        bird1.physicsBody = SKPhysicsBody(circleOfRadius: bird1Texture.size().height / 11)
-        bird1.physicsBody?.affectedByGravity = false
-        bird1.physicsBody?.isDynamic = true
-        bird1.physicsBody?.mass = 0.2
-        bird1.physicsBody?.allowsRotation = true
-        
-        bird1.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
-        
-        let bird2Texture = SKTexture(imageNamed: "false bird 2")
-        
-       
-        
-        bird2 = childNode(withName: "false bird 2") as! SKSpriteNode
-        bird2.physicsBody = SKPhysicsBody(circleOfRadius: bird2Texture.size().height / 11)
-        bird2.physicsBody?.affectedByGravity = false
-        bird2.physicsBody?.isDynamic = true
-        bird2.physicsBody?.mass = 0.2
-        bird2.physicsBody?.allowsRotation = true
-        
-        bird2.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
-        
-        let bird3Texture = SKTexture(imageNamed: "false bird 3")
-        
-    
-        
-        bird3 = childNode(withName: "false bird 3") as! SKSpriteNode
-        bird3.physicsBody = SKPhysicsBody(circleOfRadius: bird3Texture.size().height / 11)
-        bird3.physicsBody?.affectedByGravity = false
-        bird3.physicsBody?.isDynamic = true
-        bird3.physicsBody?.mass = 0.2
-        bird3.physicsBody?.allowsRotation = true
-        
-        bird3.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
-        
-        // Label
-        
-        scoreLabel.fontName = "Helvatica"
+        scoreLabel.fontName = "Helvetica"
         scoreLabel.fontSize = 60
-        scoreLabel.fontColor = .darkGray
         scoreLabel.text = "0"
         scoreLabel.position = CGPoint(x: 0, y: self.frame.height / 4)
         scoreLabel.zPosition = 2
         self.addChild(scoreLabel)
         
         
-        
+       
     }
-    // Delegate eklendikten sonra didbegincontact yani birbirine degdi func cagrilabilir
+    
     func didBegin(_ contact: SKPhysicsContact) {
-        // Iki farkli cismin birbiri ile etkilesimini duzenler
-        if contact.bodyA.collisionBitMask == ColliderType.Seagull.rawValue || contact.bodyB.collisionBitMask == ColliderType.Seagull.rawValue {
-                    
-                    score += 1
-                    scoreLabel.text = String(score)
-                    
-        } else {
+        
+        if contact.bodyA.collisionBitMask == ColliderType.Bagel.rawValue {
+                
+                score += 1
+                scoreLabel.text = String(score)
+                print("YES ")
+            } else {
             score -= 1
             scoreLabel.text = String(score)
+            print("NO ")
         }
+        
     }
     
     
+    func touchDown(atPoint pos : CGPoint) {
+       
+    }
+    
+    func touchMoved(toPoint pos : CGPoint) {
+       
+    }
+    
+    func touchUp(atPoint pos : CGPoint) {
+       
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        /*
+        bird.physicsBody?.applyImpulse(CGVector(dx: 50, dy: 100))
+        bird.physicsBody?.affectedByGravity = true
+ */
         if gameStarted == false {
             
             if let touch = touches.first {
@@ -174,98 +201,119 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                 bagel.position = touchLocation
                             }
                         }
+                        
                     }
+                    
                 }
+                
             }
+            
+            
+            
         }
+        
+   
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+      if gameStarted == false {
+          
+          if let touch = touches.first {
+              
+              let touchLocation = touch.location(in: self)
+              let touchNodes = nodes(at: touchLocation)
+              
+              if touchNodes.isEmpty == false {
+                  
+                  for node in touchNodes {
+                      
+                      if let sprite = node as? SKSpriteNode {
+                          if sprite == bagel {
+                              bagel.position = touchLocation
+                          }
+                      }
+                      
+                  }
+                  
+              }
+              
+          }
+          
+          
+          
+      }
         
-        
-        if gameStarted == false {
-            
-            if let touch = touches.first {
-                
-                let touchLocation = touch.location(in: self)
-                let touchNodes = nodes(at: touchLocation)
-                
-                if touchNodes.isEmpty == false {
-                    
-                    for node in touchNodes {
-                        
-                        if let sprite = node as? SKSpriteNode {
-                            if sprite == bagel {
-                                bagel.position = touchLocation
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if gameStarted == false {
+        
+        if let touch = touches.first {
             
-            if let touch = touches.first {
+            let touchLocation = touch.location(in: self)
+            let touchNodes = nodes(at: touchLocation)
+            
+            if touchNodes.isEmpty == false {
                 
-                let touchLocation = touch.location(in: self)
-                let touchNodes = nodes(at: touchLocation)
-                
-                if touchNodes.isEmpty == false {
+                for node in touchNodes {
                     
-                    for node in touchNodes {
-                        
-                        if let sprite = node as? SKSpriteNode {
+                    if let sprite = node as? SKSpriteNode {
+                        if sprite == bagel {
+                           
+                            let dx = -(touchLocation.x - originalPosition!.x)
+                            let dy = -(touchLocation.y - originalPosition!.y)
                             
-                            if sprite == bagel {
-                                
-                                let dx = -(touchLocation.x - originalPosition!.x)
-                                let dy = -(touchLocation.y - originalPosition!.y)
-                                
-                                let impulse = CGVector(dx: dx, dy: dy)
-                                
-                                bagel.physicsBody?.applyImpulse(impulse)
-                                bagel.physicsBody?.affectedByGravity = true
-                                
-                                gameStarted = true
-                            }
+                            let impulse = CGVector(dx: dx, dy: dy)
+                            
+                            bagel.physicsBody?.applyImpulse(impulse)
+                            bagel.physicsBody?.affectedByGravity = true
+                            
+                            gameStarted = true
+                            
                         }
                     }
+                    
                 }
+                
             }
+            
         }
+        
+        
     }
-    
-
+    }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+       
     }
     
+    
     override func update(_ currentTime: TimeInterval) {
+        // Called before each frame is rendered
         
-        if let bagelPhysicsBody = bagel.physicsBody {
+        
+        if let birdPhysicsBody = bagel.physicsBody {
             
-            // hiz durumunu belirler velocity:hiz
-            if bagelPhysicsBody.velocity.dx <= 0.1 && bagelPhysicsBody.velocity.dy <= 0.1 && bagelPhysicsBody.angularVelocity <= 0.1 && gameStarted == true {
+            if birdPhysicsBody.velocity.dx <= 0.1 && birdPhysicsBody.velocity.dy <= 0.1 && birdPhysicsBody.angularVelocity <= 0.1 && gameStarted == true {
                 
-                // Oyun basindaki duruma donrururuz
+                
                 bagel.physicsBody?.affectedByGravity = false
                 bagel.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
                 bagel.physicsBody?.angularVelocity = 0
                 bagel.zPosition = 1
                 bagel.position = originalPosition!
+                
+                
+                //score = 0
+                //scoreLabel.text = String(score)
+                
                 gameStarted = false
                 
-//                score = 0
-//                scoreLabel.text = String(score)
-                
-                gameStarted = false
                 
             }
+            
         }
+        
     }
 }
