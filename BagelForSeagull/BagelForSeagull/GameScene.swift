@@ -12,6 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: -Variables
     var bagel = SKSpriteNode()
+    var seagull = SKSpriteNode()
     var bird1 = SKSpriteNode()
     var bird2 = SKSpriteNode()
     var bird3 = SKSpriteNode()
@@ -25,7 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     enum ColliderType: UInt32 {
         case Bagel = 1
-        case Bird = 2
+        case Seagull = 2
+        case Bird = 4
         
     }
     
@@ -54,9 +56,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Cisimlerin birbiri ile etkilesimini duzenler
         bagel.physicsBody?.contactTestBitMask = ColliderType.Bagel.rawValue
         bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
-        bagel.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
+        // Sadece kus ile carpisinca if blogunu atlamamiza ve scoru ona gore duzenlemede kullandik
+        bagel.physicsBody?.collisionBitMask = ColliderType.Bird.rawValue
         
-        
+        // Seagull
         
         // Other Birds
         
@@ -227,6 +230,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bagel.zPosition = 1
                 bagel.position = originalPosition!
                 gameStarted = false
+                
+                score = 0
+                scoreLabel.text = String(score)
+                
+                gameStarted = false
+                
             }
         }
     }
