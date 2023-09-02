@@ -23,6 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score = 0
     var scoreLabel = SKLabelNode()
     
+    // Type'i UInt32 cakismamasi icin sirasiyla 1,2,4,8,16 seklinde vermek zorundayiz degerleri
     enum ColliderType: UInt32 {
         case Bagel = 1
         case Bird = 2
@@ -37,14 +38,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
  
+        // Bagel | Simit'in Property'leri
         bagel = childNode(withName: "bagel") as! SKSpriteNode
         
         let bagelTexture = SKTexture(imageNamed: "bagel")
         
-        
         bagel.physicsBody = SKPhysicsBody(circleOfRadius: bagelTexture.size().height / 13)
         bagel.physicsBody?.affectedByGravity = false
+        // Hareket edip edememesini belirler dynamic
         bagel.physicsBody?.isDynamic = true
+        // Mass: kutle
         bagel.physicsBody?.mass = 0.4
         originalPosition = bagel.position
         
@@ -52,6 +55,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bagel.physicsBody?.categoryBitMask = ColliderType.Bagel.rawValue
         bagel.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
+        // Bird 1 Properties
         let bird1Texture = SKTexture(imageNamed: "bird1")
         
         bird1 = childNode(withName: "bird1") as! SKSpriteNode
@@ -67,6 +71,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Bird1'in bagel'dan etkilenmesini, onunla compact olunca harekete gecmesini saglar
         bird1.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
+        // Bird 2 Properties
         let bird2Texture = SKTexture(imageNamed: "bird2")
         
         bird2 = childNode(withName: "bird2") as! SKSpriteNode
@@ -81,6 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bird2.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
+        // Bird 3 Properties
         let bird3Texture = SKTexture(imageNamed: "bird3")
         
         bird3 = childNode(withName: "bird3") as! SKSpriteNode
@@ -95,6 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bird3.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
+        // Seagull | Marti Properties
         let seagullTexture = SKTexture(imageNamed: "seagull")
         
         seagull = childNode(withName: "seagull") as! SKSpriteNode
@@ -109,7 +116,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         seagull.physicsBody?.collisionBitMask = ColliderType.Bagel.rawValue
         
-        //Label
+        // Score Label Properties
         scoreLabel.fontName = "Helvetica"
         scoreLabel.fontSize = 40
         scoreLabel.fontColor = .black
@@ -126,11 +133,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             score += 3
             scoreLabel.text = "Score:" + String(score)
-            print("YES ")
+            print("YES You scored! ")
         } else {
             score -= 1
             scoreLabel.text = "Score:" + String(score)
-            print("NO ")
+            print("NO WAY :( ")
         }
     }
     
@@ -164,15 +171,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                 bagel.position = touchLocation
                             }
                         }
-                        
                     }
-                    
                 }
-                
             }
-            
         }
-   
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -192,15 +194,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                               bagel.position = touchLocation
                           }
                       }
-                      
                   }
-                  
               }
-              
           }
-
       }
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -228,24 +225,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             bagel.physicsBody?.affectedByGravity = true
                             
                             gameStarted = true
-                            
                         }
                     }
-                    
                 }
-                
             }
-            
         }
-        
-        
     }
-    }
+}
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
        
     }
     
+    // Bagel'i hareketi tamamlandiktan sonra baslangic konumuna atariz
     override func update(_ currentTime: TimeInterval) {
         
         if let birdPhysicsBody = bagel.physicsBody {
@@ -259,10 +251,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bagel.position = originalPosition!
                 
                 gameStarted = false
-                
             }
-            
         }
-        
     }
 }
